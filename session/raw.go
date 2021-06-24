@@ -2,19 +2,36 @@ package session
 
 import (
 	"database/sql"
+	"geeorm/dialect"
 	"geeorm/geelog"
+	"geeorm/schema"
 	"strings"
 )
 
 type Session struct {
-	db      *sql.DB
-	sql     strings.Builder
-	sqlVars []interface{}
+	db       *sql.DB
+	dialect  dialect.Dialect
+	refTable *schema.Schema
+	sql      strings.Builder
+	sqlVars  []interface{}
 }
 
-func New(db *sql.DB) *Session {
+func New(db *sql.DB, dialect dialect.Dialect) *Session {
 	return &Session{
-		db: db,
+		db:      db,
+		dialect: dialect,
+	}
+}
+
+func NewSession() *Session {
+	db, err := sql.Open("mysql", "root:12345678@tcp(localhost:3306)/geeorm")
+	if err != nil {
+		geelog.Error(err)
+	}
+	dialect, _ := dialect.GetDialect("mysql")
+	return &Session{
+		db:      db,
+		dialect: dialect,
 	}
 }
 
