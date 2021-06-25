@@ -2,6 +2,7 @@ package session
 
 import (
 	"database/sql"
+	"geeorm/clause"
 	"geeorm/dialect"
 	"geeorm/geelog"
 	"geeorm/schema"
@@ -12,6 +13,7 @@ type Session struct {
 	db       *sql.DB
 	dialect  dialect.Dialect
 	refTable *schema.Schema
+	clause   clause.Clause
 	sql      strings.Builder
 	sqlVars  []interface{}
 }
@@ -23,6 +25,7 @@ func New(db *sql.DB, dialect dialect.Dialect) *Session {
 	}
 }
 
+// NewSession For Test
 func NewSession() *Session {
 	db, err := sql.Open("mysql", "root:12345678@tcp(localhost:3306)/geeorm")
 	if err != nil {
@@ -38,6 +41,7 @@ func NewSession() *Session {
 func (s *Session) Clear() {
 	s.sql.Reset()
 	s.sqlVars = nil
+	s.clause = clause.Clause{}
 }
 
 func (s *Session) DB() *sql.DB {

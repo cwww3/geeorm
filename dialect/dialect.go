@@ -7,11 +7,11 @@ type Dialect interface {
 	TableExistSQL(tableName string) (string, []interface{})
 }
 
+var dialectMap map[string]Dialect
+
 func init() {
 	dialectMap = make(map[string]Dialect)
 }
-
-var dialectMap map[string]Dialect
 
 func RegisterDialect(name string, dialect Dialect) {
 	dialectMap[name] = dialect
