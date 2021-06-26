@@ -25,6 +25,11 @@ func (s *Session) Insert(values ...interface{}) (int64, error) {
 }
 
 func (s *Session) Find(value interface{}) error {
+	// hooks BeforeQuery
+	if err := s.doBeforeQuery(); err != nil {
+		return err
+	}
+
 	destSlice := reflect.Indirect(reflect.ValueOf(value))
 	// 获取切片的单个元素的类型
 	// destSlice.Type() -> []session.User
@@ -38,7 +43,6 @@ func (s *Session) Find(value interface{}) error {
 	if err != nil {
 		return err
 	}
-
 	for rows.Next() {
 		dest := reflect.New(destType).Elem()
 		var values []interface{}
@@ -85,7 +89,7 @@ func (s *Session) Delete() (int64, error) {
 }
 
 func (s *Session) Count() (int64, error) {
-	s.clause.Set(clause.COUNT,s.RefTable().Name)
+	s.clause.Set(clause.COUNT, s.RefTable().Name)
 	sql, values := s.clause.Build(clause.COUNT, clause.WHERE)
 	row := s.Raw(sql, values...).QueryRow()
 	var count int64
