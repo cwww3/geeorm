@@ -10,6 +10,7 @@ const (
 	ORDERBY
 	WHERE
 	LIMIT
+	VALUES
 )
 
 type Clause struct {

@@ -15,6 +15,7 @@ func init() {
 	generators[ORDERBY] = _orderBy
 	generators[WHERE] = _where
 	generators[LIMIT] = _limit
+	generators[VALUES] = _values
 }
 
 func _insert(values ...interface{}) (string, []interface{}) {
@@ -27,14 +28,14 @@ func _values(values ...interface{}) (string, []interface{}) {
 	var sql strings.Builder
 	var bindStr string
 	var vars []interface{}
-	sql.WriteString("values ")
+	sql.WriteString("VALUES ")
 	for i, value := range values {
 		v := value.([]interface{})
 		if len(bindStr) == 0 {
 			bindStr = getBindVars(len(v))
 		}
 		sql.WriteString(fmt.Sprintf("(%v)", bindStr))
-		if i+1 != len(v) {
+		if i+1 != len(values) {
 			sql.WriteString(", ")
 		}
 		vars = append(vars, v...)
