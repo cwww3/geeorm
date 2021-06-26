@@ -16,6 +16,31 @@ func init() {
 	generators[WHERE] = _where
 	generators[LIMIT] = _limit
 	generators[VALUES] = _values
+	generators[UPDATE] = _update
+	generators[DELETE] = _delete
+	generators[COUNT] = _count
+}
+
+func _update(values ...interface{}) (string, []interface{}) {
+	tableName := values[0]
+	m := values[1].(map[string]interface{})
+	var keys []string
+	var vars []interface{}
+	for k, v := range m {
+		keys = append(keys, k+" = ?")
+		vars = append(vars, v)
+	}
+	return fmt.Sprintf("UPDATE %s SET %s", tableName, strings.Join(keys, ", ")), vars
+}
+
+func _delete(values ...interface{}) (string, []interface{}) {
+	tableName := values[0]
+	return fmt.Sprintf("DELETE FROM %s", tableName), []interface{}{}
+}
+
+func _count(values ...interface{}) (string, []interface{}) {
+	tableName := values[0]
+	return _select(tableName, []string{"COUNT(*)"})
 }
 
 func _insert(values ...interface{}) (string, []interface{}) {
@@ -55,7 +80,7 @@ func _select(values ...interface{}) (string, []interface{}) {
 	fmt.Println(len(values))
 	tableName := values[0].(string)
 	fields := strings.Join(values[1].([]string), ",")
-	return fmt.Sprintf("SELECT %v FROM %s",fields, tableName), []interface{}{}
+	return fmt.Sprintf("SELECT %v FROM %s", fields, tableName), []interface{}{}
 }
 
 func _limit(values ...interface{}) (string, []interface{}) {
