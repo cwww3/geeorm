@@ -9,7 +9,7 @@ import (
 func (s *Session) Insert(values ...interface{}) (int64, error) {
 	var recordValues []interface{}
 	for _, value := range values {
-		table := s.Model(value).refTable
+		table := s.Model(value).RefTable()
 		s.clause.Set(clause.INSERT, table.Name, table.FieldNames)
 		recordValues = append(recordValues, table.RecordValues(value))
 	}
