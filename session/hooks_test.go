@@ -14,7 +14,8 @@ func TestSession_Hook(t *testing.T) {
 	fmt.Println(users)
 }
 
-func (u *User) BeforeQuery() error {
+func (u *User) BeforeQuery(s *Session) error {
 	fmt.Println("BeforeQuery")
+	fmt.Println(s.RefTable().Name)
 	return nil
 }
