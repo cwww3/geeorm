@@ -2,20 +2,6 @@ package clause
 
 import "strings"
 
-type TYPE int
-
-const (
-	INSERT = iota
-	SELECT
-	ORDERBY
-	WHERE
-	LIMIT
-	VALUES
-	UPDATE
-	DELETE
-	COUNT
-)
-
 type Clause struct {
 	sql     map[TYPE]string
 	sqlVars map[TYPE][]interface{}
