@@ -16,11 +16,14 @@ func main() {
 	_, _ = s.Raw("insert into user values (?), (?)", "Tom", "Sam").Exec()
 
 	s.Raw("select * from user where name = ?;", "Tom")
-	row := s.QueryRow()
-	var u string
-	err := row.Scan(&u)
+	rows,err  := s.QueryRows()
 	if err != nil {
 		geelog.Error(err)
 	}
-	fmt.Println(u)
+	defer rows.Close()
+	for rows.Next() {
+		var u string
+		err = rows.Scan(&u)
+		fmt.Println(u)
+	}
 }

@@ -45,9 +45,14 @@ func Parse(dest interface{}, d dialect.Dialect) *Schema {
 
 	for i := 0; i < modelType.NumField(); i++ {
 		p := modelType.Field(i)
+		//name := []rune(p.Name)
+		//if !p.Anonymous && len(name) > 0 && name[0] >= 'A' && name[0] <= 'Z'{
 		if !p.Anonymous && ast.IsExported(p.Name) {
 			field := &Field{
 				Name: p.Name,
+				// New() reflect.Type -> reflect.Value   通过反射生成对象 与new()类似 生成指针指向零值对象
+				// https://colobu.com/2019/01/29/go-reflect-performance/
+				// https://vimsky.com/examples/usage/reflect-new-function-in-golang-with-examples.html
 				Type: d.DataTypeOf(reflect.Indirect(reflect.New(p.Type))),
 			}
 			if v, ok := p.Tag.Lookup("geeorm"); ok {

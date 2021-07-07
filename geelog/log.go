@@ -8,7 +8,9 @@ import (
 )
 
 var (
-	errorLog = log.New(os.Stdout,"\033[31m[error]\033[0m",log.LstdFlags|log.Lshortfile)
+	// 字体颜色 https://blog.csdn.net/u014470361/article/details/81512330
+	// https://blog.csdn.net/Primeprime/article/details/79708373
+	errorLog = log.New(os.Stdout,"\033[4;40;31m[error]\033[0m",log.LstdFlags|log.Lshortfile)
 	infoLog = log.New(os.Stdout,"\033[34m[info ]\033[0m",log.LstdFlags|log.Lshortfile)
 	loggers  = []*log.Logger{errorLog, infoLog}
 	mu sync.Mutex
