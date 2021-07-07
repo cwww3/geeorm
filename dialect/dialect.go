@@ -3,7 +3,7 @@ package dialect
 import "reflect"
 
 type Dialect interface {
-	DataTypeOf(typ reflect.Value) string
+	DataTypeOf(typ reflect.Type) string
 	TableExistSQL(tableName string) (string, []interface{})
 }
 

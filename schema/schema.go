@@ -53,7 +53,7 @@ func Parse(dest interface{}, d dialect.Dialect) *Schema {
 				// New() reflect.Type -> reflect.Value   通过反射生成对象 与new()类似 生成指针指向零值对象
 				// https://colobu.com/2019/01/29/go-reflect-performance/
 				// https://vimsky.com/examples/usage/reflect-new-function-in-golang-with-examples.html
-				Type: d.DataTypeOf(reflect.Indirect(reflect.New(p.Type))),
+				Type: d.DataTypeOf(p.Type),
 			}
 			if v, ok := p.Tag.Lookup("geeorm"); ok {
 				field.Tag = v
